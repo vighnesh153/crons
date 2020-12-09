@@ -1,0 +1,26 @@
+{
+  "name": "crons",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Crons for my stuff",
+  "author": "Vighnesh Raut",
+  "license": "MIT",
+  "scripts": {
+    "precommit-msg": "echo 'Pre-commit tasks...' && exit 0",
+    "generate-encrypted-secrets": "node lib/pre-commit-hook.js",
+    "add-encrypted-secrets-to-git": "git add es.txt ec.txt"
+  },
+  "pre-commit": [
+    "precommit-msg",
+    "generate-encrypted-secrets",
+    "add-encrypted-secrets-to-git"
+  ],
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "googleapis": "^66.0.0",
+    "mime-types": "^2.1.27"
+  },
+  "devDependencies": {
+    "pre-commit": "^1.2.2"
+  }
+}

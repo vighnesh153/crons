@@ -1,0 +1,31 @@
+name: Test
+
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+
+jobs:
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Set dns for Mongo URI lookup resolution
+        run: |
+          sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Backup and Upload to Google Drive
+        env:
+          BACKUP_INFO_SECRET: ${{ secrets.BACKUP_INFO_SECRET }}
+          BASE_64_GCP_SECRET: ${{ secrets.BASE_64_GCP_SECRET }}
+        run: node backup/mongodb/to-google-drive.js
