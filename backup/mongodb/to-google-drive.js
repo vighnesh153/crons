@@ -55,7 +55,7 @@ const getDateForFileName = () => {
     return res.data.id;
   }
 
-  const constants = require("../../dist/constants.json")
+  const constants = require("../../constants.json")
   Promise.all(
     constants
       .files
