@@ -26,6 +26,5 @@ jobs:
 
       - name: Backup and Upload to Google Drive
         env:
-          BACKUP_INFO_SECRET: ${{ secrets.BACKUP_INFO_SECRET }}
-          BASE_64_GCP_SECRET: ${{ secrets.BASE_64_GCP_SECRET }}
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
         run: node backup/mongodb/to-google-drive.js

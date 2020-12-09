@@ -3,24 +3,6 @@ const mime = require('mime-types')
 
 const { google } = require('googleapis');
 
-// Doing it in IIFE to avoid using/logging the secret elsewhere
-(() => {
-  if (process.env.NODE_ENV !== "dev") {
-    const backupInfoSecret = process.env.BACKUP_INFO_SECRET;
-    const decodedBackupInfo = Buffer.from(backupInfoSecret, "base64").toString("ascii");
-    fs.writeFileSync("constants.json", decodedBackupInfo);
-  }
-})();
-
-// Doing it in IIFE to avoid using/logging the secret elsewhere
-(() => {
-  if (process.env.NODE_ENV !== "dev") {
-    const gcpSecret = process.env.BASE_64_GCP_SECRET;
-    const decodedGCP = Buffer.from(gcpSecret, "base64").toString("ascii");
-    fs.writeFileSync("secrets.json", decodedGCP);
-  }
-})();
-
 const drive = google.drive({
   version: 'v3',
   auth: new google.auth.GoogleAuth({
