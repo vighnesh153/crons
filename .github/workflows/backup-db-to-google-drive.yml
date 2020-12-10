@@ -23,6 +23,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+      
+      - name: List
+        run: ls -lah
 
       - name: Backup and Upload to Google Drive
         env:
