@@ -26,12 +26,12 @@ jobs:
         run: npm install
 
       - name: Decrypt encryption
+        env:
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
         run: node lib/decrypt-files.js
 
       - name: List
         run: ls -lah
 
       - name: Backup and Upload to Google Drive
-        env:
-          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
         run: node backup/mongodb/to-google-drive.js
