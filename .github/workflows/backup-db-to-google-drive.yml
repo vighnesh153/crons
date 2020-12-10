@@ -24,7 +24,10 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-      
+
+      - name: Decrypt encryption
+        run: node lib/decrypt-files.js
+
       - name: List
         run: ls -lah
 
