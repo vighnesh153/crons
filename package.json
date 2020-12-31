@@ -16,9 +16,11 @@
     "add-encrypted-secrets-to-git"
   ],
   "dependencies": {
+    "@octokit/core": "^3.2.4",
     "dotenv": "^8.2.0",
     "googleapis": "^66.0.0",
-    "mime-types": "^2.1.27"
+    "mime-types": "^2.1.27",
+    "tweetsodium": "0.0.5"
   },
   "devDependencies": {
     "pre-commit": "^1.2.2"

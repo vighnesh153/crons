@@ -119,6 +119,7 @@ dist
 .idea
 .env
 
+temp.js
 *.json
 !package.json
 !package-lock.json

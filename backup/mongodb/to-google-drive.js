@@ -1,7 +1,10 @@
 const fs = require('fs');
-const mime = require('mime-types')
+const {execSync} = require("child_process");
 
-const { google } = require('googleapis');
+const mime = require('mime-types')
+const {google} = require('googleapis');
+
+const constants = require("../../constants.json")
 
 const drive = google.drive({
   version: 'v3',
@@ -16,8 +19,8 @@ const getDateForFileName = () => {
   return dateString.replace(/[\/, \:]/g, "_");
 };
 
+// Create Mongo Dump and Upload to Google Drive
 (() => {
-  const {execSync} = require("child_process");
 
   async function createDumpAndUpload(filePath, parentDirId, MONGO_URL) {
     execSync(`mongodump --uri ${MONGO_URL} --archive=${filePath} --gzip`);
@@ -37,7 +40,6 @@ const getDateForFileName = () => {
     return res.data.id;
   }
 
-  const constants = require("../../constants.json")
   Promise.all(
     constants
       .files
@@ -49,5 +51,55 @@ const getDateForFileName = () => {
   }).catch((err) => {
     console.error(err);
   });
+})();
+
+// Remove very-old backups
+(async () => {
+  function getExpiryDays(parents) {
+    for (const fileMeta of (constants.files || [])) {
+      if (parents.includes(fileMeta.parentDirId)) {
+        return fileMeta.maxDays;
+      }
+    }
+    return -1;
+  }
+
+  function checkIfExpired(fileName, expiryDays) {
+    const sections = fileName.toString().split('_');
+    const month = parseInt(sections[0]);  // 1 to 12
+    const day = parseInt(sections[1]);
+    const year = parseInt(sections[2]);
+
+    // in JS, valid months are 0 to 11
+    const dateCreated = new Date(year, month - 1, day);
+    const expiresOn = new Date(new Date().setDate(dateCreated.getDate() + expiryDays))
+
+    return expiresOn < new Date();
+  }
+
+  try {
+    const res = await drive.files.list({
+      corpora: 'user',
+      fields: [
+        'files(id,kind,name,parents,mimeType)'
+      ],
+    });
+    for (const file of res.data.files) {
+      const parents = file.parents || [];
+      const expiryDays = getExpiryDays(parents);
+      if (expiryDays === -1) {
+        continue;
+      }
+      const hasExpired = checkIfExpired(file.name, expiryDays);
+      if (hasExpired) {
+        await drive.files.delete({
+          fileId: file.id
+        });
+        console.log('Deleted file:', file.id, file.name);
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
 })();
 

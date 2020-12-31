@@ -31,11 +31,15 @@ project.
     {
       "localPath": "<UNIQUE-FILE-NAME-1>.gz",
       "parentDirId": "<PARENT-DIRECTORY-ID-1>",
+      "parentDirPath": "A unique identifier. For human to remember which parent folder/directory has the above ID",
+      "maxDays": 20,
       "MONGO_URL": "<MONGO-URL-WITH-OR-WITHOUT-DB-AT-END-1>"
     },
     {
       "localPath": "<UNIQUE-FILE-NAME-2>.gz",
       "parentDirId": "<PARENT-DIRECTORY-ID-2>",
+      "parentDirPath": "A unique identifier. For human to remember which parent folder/directory has the above ID",
+      "maxDays": 30,
       "MONGO_URL": "<MONGO-URL-WITH-OR-WITHOUT-DB-AT-END-2>"
     }
   ]
