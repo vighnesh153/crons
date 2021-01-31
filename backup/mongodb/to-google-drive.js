@@ -64,6 +64,12 @@ const getDateForFileName = () => {
     return -1;
   }
 
+  function addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
   function checkIfExpired(fileName, expiryDays) {
     const sections = fileName.toString().split('_');
     const month = parseInt(sections[0]);  // 1 to 12
@@ -72,7 +78,7 @@ const getDateForFileName = () => {
 
     // in JS, valid months are 0 to 11
     const dateCreated = new Date(year, month - 1, day);
-    const expiresOn = new Date(new Date().setDate(dateCreated.getDate() + expiryDays))
+    const expiresOn = addDays(dateCreated, expiryDays);
 
     return expiresOn < new Date();
   }
